@@ -3,1161 +3,1643 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>انساني جسم جو تعليمي گائيڊ - سنڌي ۾ آناتومي</title>
+    <title>انساني جسم جو تين-ڊي گائيڊ - سنڌي ۾ طبي تجسيم</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/geometries/TextGeometry.js"></script>
     <style>
+        /* CSS ري سيٽ ۽ گلابفائزم فٽنگ */
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --organ-color: #9b59b6;
-            --system-color: #1abc9c;
-            --text-color: #2c3e50;
-            --bg-color: #f9f9f9;
-            --card-bg: #ffffff;
+            --primary-bg: #0a0e17;
+            --secondary-bg: #1a1f2e;
+            --accent-blue: #00d4ff;
+            --accent-purple: #9d4edd;
+            --accent-green: #00ff9d;
+            --accent-red: #ff4757;
+            --accent-yellow: #ffd166;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0c0;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Noto Sans Arabic', 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'Noto Sans Arabic', sans-serif;
         }
 
         body {
-            background: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.8;
-            text-align: right;
+            background: var(--primary-bg);
+            color: var(--text-primary);
             overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+            direction: rtl;
         }
 
-        /* نيوگيشن بار */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary-color), #1a252f);
-            color: white;
-            padding: 15px 30px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        /* هيرو هيڊر */
+        .header {
+            background: linear-gradient(135deg, rgba(26, 31, 46, 0.95), rgba(10, 14, 23, 0.95));
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--glass-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 1000;
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: white;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 1rem;
         }
 
-        .logo i {
-            color: #e74c3c;
+        .logo-icon {
+            color: var(--accent-blue);
+            font-size: 2rem;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateY(-2px);
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 80px auto 20px;
-            padding: 20px;
-        }
-
-        /* هيرو سيڪشن */
-        .hero {
-            background: linear-gradient(rgba(44,62,80,0.9), rgba(44,62,80,0.9)), 
-                        url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=2070');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 100px 40px;
-            border-radius: 20px;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, #3498db, #e74c3c);
+        .logo-text h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            margin-bottom: 0.25rem;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 30px;
-            color: #ecf0f1;
+        .logo-text p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
-        /* 3D ويوور سيڪشن */
-        .viewer-section {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        #model-container {
-            width: 100%;
-            height: 600px;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        .model-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.7);
-            padding: 10px;
-            border-radius: 10px;
+        /* مين ڪنٽينر */
+        .main-container {
             display: flex;
-            gap: 10px;
-            z-index: 10;
+            flex: 1;
+            overflow: hidden;
         }
 
-        .model-controls button {
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .model-controls button:hover {
-            background: #2980b9;
-            transform: scale(1.05);
-        }
-
-        /* آرگن انفو پينل */
-        .info-panel {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        /* سائيڊبار ڪنٽرولز */
+        .sidebar {
+            width: 320px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--glass-border);
+            padding: 1.5rem;
             overflow-y: auto;
-            max-height: 600px;
+            transition: transform 0.3s ease;
         }
 
-        .organ-title {
-            color: var(--accent-color);
-            font-size: 2rem;
-            margin-bottom: 15px;
-            border-bottom: 3px solid var(--accent-color);
-            padding-bottom: 10px;
+        /* 3D ويوپورٽ */
+        .viewport-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
         }
 
-        .organ-details {
-            margin-top: 20px;
-        }
-
-        .detail-item {
-            margin-bottom: 15px;
-        }
-
-        .detail-item strong {
-            color: var(--primary-color);
-            display: block;
-            margin-bottom: 5px;
-            font-size: 1.1rem;
-        }
-
-        /* باڊي سسٽم ڪارڊس */
-        .systems-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
-        }
-
-        .system-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-top: 5px solid;
-        }
-
-        .system-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-
-        .system-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: var(--system-color);
-        }
-
-        .system-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        /* آرگن ڊيٽيلس موڊل */
-        .organ-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        #three-canvas {
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            overflow-y: auto;
+            display: block;
         }
 
-        .modal-content {
-            background: white;
-            width: 90%;
-            max-width: 800px;
-            margin: 50px auto;
-            border-radius: 20px;
-            padding: 30px;
-            position: relative;
-            animation: modalSlide 0.5s ease;
-        }
-
-        @keyframes modalSlide {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .close-modal {
+        /* ڪنٽرول بار */
+        .control-bar {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--accent-color);
-        }
-
-        /* آڇارٽ ڪنٽرول */
-        .search-container {
-            position: relative;
-            margin: 20px 0;
-        }
-
-        #organ-search {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid var(--secondary-color);
-            border-radius: 10px;
-            font-size: 1.1rem;
-            background: var(--card-bg);
-        }
-
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-height: 300px;
-            overflow-y: auto;
-            display: none;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            gap: 1rem;
             z-index: 100;
         }
 
-        .search-item {
-            padding: 12px 20px;
-            border-bottom: 1px solid #eee;
+        .control-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            background: var(--glass-bg);
+            transform: scale(1.1);
+            color: var(--accent-blue);
+        }
+
+        /* سسٽم ٽاگل ڪارڊس */
+        .system-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .search-item:hover {
-            background: #f5f5f5;
-            padding-right: 25px;
+        .system-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        /* فٽر */
-        footer {
-            background: var(--primary-color);
-            color: white;
-            padding: 40px 20px;
-            margin-top: 60px;
-            text-align: center;
-            border-top: 5px solid var(--accent-color);
+        .system-card:hover::before {
+            opacity: 1;
         }
 
-        @media (max-width: 1024px) {
-            .viewer-section {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .mobile-menu {
-                display: block !important;
-            }
+        .system-card:hover {
+            transform: translateX(-5px);
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        .mobile-menu {
-            display: none;
+        .system-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .system-icon {
             font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .system-toggle {
+            width: 40px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            position: relative;
             cursor: pointer;
         }
 
-        .mobile-nav {
-            display: none;
-            background: var(--primary-color);
+        .system-toggle::after {
+            content: '';
             position: absolute;
-            top: 100%;
-            right: 0;
-            width: 100%;
-            padding: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            top: 2px;
+            right: 2px;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
         }
 
-        .mobile-nav.active {
+        .system-toggle.active::after {
+            transform: translateX(-20px);
+            background: var(--accent-green);
+        }
+
+        /* انفو پينل */
+        .info-panel {
+            background: rgba(10, 14, 23, 0.9);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            backdrop-filter: blur(20px);
+            display: none;
+        }
+
+        .info-panel.active {
             display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .organ-title {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .organ-details {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .detail-label {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        /* جينڊر سويچ */
+        .gender-switch {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 25px;
+            padding: 0.25rem;
+            margin: 1rem 0;
+        }
+
+        .gender-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .gender-btn.active {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        /* موبائيل رسپانسيويٽي */
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 300px;
+                border-left: none;
+                border-top: 1px solid var(--glass-border);
+                transform: translateY(100%);
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                z-index: 1000;
+            }
+
+            .sidebar.active {
+                transform: translateY(0);
+            }
+
+            .control-bar {
+                bottom: 320px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .logo-text h1 {
+                font-size: 1.2rem;
+            }
+
+            .control-bar {
+                padding: 0.5rem 1rem;
+                gap: 0.5rem;
+            }
+
+            .control-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+        }
+
+        /* گلاسمرفزم ايفيڪٽس */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* نيئن گلوز */
+        .neon-text {
+            text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+        }
+
+        .neon-border {
+            box-shadow: 0 0 15px var(--accent-color), inset 0 0 15px var(--accent-color);
         }
 
         /* پروگرس بار */
         .progress-container {
-            margin: 20px 0;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: #ecf0f1;
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            height: 6px;
+            border-radius: 3px;
             overflow: hidden;
-            margin-bottom: 10px;
+            margin: 1rem 0;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
-            border-radius: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            width: 0%;
             transition: width 0.5s ease;
+        }
+
+        /* تڪڙي لنڪس */
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .quick-link {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-link:hover {
+            background: var(--accent-blue);
+            color: var(--primary-bg);
+            transform: translateY(-2px);
+        }
+
+        /* لوڊنگ انڊيڪيٽر */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid transparent;
+            border-top: 4px solid var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- نيوگيشن بار -->
-    <nav class="navbar">
-        <div class="logo">
-            <i class="fas fa-heartbeat"></i>
-            <span>انساني جسم جو گائيڊ</span>
+    <!-- لوڊنگ اسڪرين -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>انساني جسم جو ماڊل ٺاهي رهيو آهيان...</p>
+        <div class="progress-container" style="width: 200px; margin-top: 1rem;">
+            <div class="progress-fill" id="loadingProgress"></div>
         </div>
-        
-        <div class="nav-links">
-            <a href="#home">گهر</a>
-            <a href="#systems">سسٽم</a>
-            <a href="#organs">آرگن</a>
-            <a href="#quiz">ڪوئز</a>
-            <a href="#about">اسان بابت</a>
-        </div>
-        
-        <div class="mobile-menu" onclick="toggleMobileNav()">
-            <i class="fas fa-bars"></i>
-        </div>
-    </nav>
-
-    <!-- موبائيل نيوگيشن -->
-    <div class="mobile-nav" id="mobileNav">
-        <a href="#home" onclick="toggleMobileNav()">گهر</a>
-        <a href="#systems" onclick="toggleMobileNav()">سسٽم</a>
-        <a href="#organs" onclick="toggleMobileNav()">آرگن</a>
-        <a href="#quiz" onclick="toggleMobileNav()">ڪوئز</a>
-        <a href="#about" onclick="toggleMobileNav()">اسان بابت</a>
     </div>
 
-    <div class="container">
-        <!-- هيرو سيڪشن -->
-        <section class="hero" id="home">
-            <h1>انساني جسم جو سنڌي گائيڊ</h1>
-            <p>طالب علمن ۽ عوام لاءِ انٽرايڪٽو تعليمي پليٽ فارم. ڪلڪ ڪريو، سکيو ۽ انساني جسم جي رازن کي ڳوليو.</p>
-            <div style="margin-top: 30px;">
-                <button onclick="scrollToSection('systems')" style="background: var(--accent-color); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin: 0 10px;">
-                    <i class="fas fa-play-circle"></i> شروع ڪريو
+    <!-- هيڊر سيڪشن -->
+    <header class="header glass-card">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <div class="logo-text">
+                <h1>انساني جسم جو تين-ڊي گائيڊ</h1>
+                <p>سنڌي ۾ طبي تجسيم - تعليمي ۽ تحقيقي</p>
+            </div>
+        </div>
+        <div class="quick-links">
+            <button class="quick-link" onclick="showSystem('skeletal')"><i class="fas fa-bone"></i> هڏا</button>
+            <button class="quick-link" onclick="showSystem('muscular')"><i class="fas fa-dumbbell"></i> عضلا</button>
+            <button class="quick-link" onclick="showSystem('nervous')"><i class="fas fa-brain"></i> دماغ</button>
+            <button class="quick-link" onclick="resetView()"><i class="fas fa-redo"></i> ري سيٽ</button>
+        </div>
+    </header>
+
+    <!-- مين ڪنٽينر -->
+    <div class="main-container">
+        <!-- 3D ويوپورٽ -->
+        <div class="viewport-container">
+            <canvas id="three-canvas"></canvas>
+            
+            <!-- ڪنٽرول بار -->
+            <div class="control-bar glass-card">
+                <button class="control-btn" onclick="rotateLeft()" title="کاٻي گھمايو">
+                    <i class="fas fa-undo"></i>
                 </button>
-                <button onclick="scrollToSection('viewer')" style="background: transparent; color: white; border: 2px solid white; padding: 12px 30px; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin: 0 10px;">
-                    <i class="fas fa-eye"></i> 3D ويوور
+                <button class="control-btn" onclick="rotateRight()" title="ساڄو گھمايو">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button class="control-btn" onclick="zoomIn()" title="وڌيڪ ڏيکو">
+                    <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="control-btn" onclick="zoomOut()" title="گھٽ ڏيکو">
+                    <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="control-btn" onclick="toggleGender()" title="مرد/عورت">
+                    <i class="fas fa-venus-mars"></i>
+                </button>
+                <button class="control-btn" onclick="toggleXRay()" title="ايڪس-رے">
+                    <i class="fas fa-x-ray"></i>
+                </button>
+                <button class="control-btn" id="toggleSidebar" onclick="toggleSidebar()" title="ڪنٽرولز">
+                    <i class="fas fa-sliders-h"></i>
                 </button>
             </div>
-        </section>
-
-        <!-- سرچ بار -->
-        <div class="search-container">
-            <input type="text" id="organ-search" placeholder="آرگن جو نالو لکو (مثال: دل، جگر، دماغ...)" oninput="searchOrgans()">
-            <div class="search-results" id="searchResults"></div>
         </div>
 
-        <!-- 3D ويوور سيڪشن -->
-        <section class="viewer-section" id="viewer">
-            <div>
-                <div id="model-container">
-                    <div class="model-controls">
-                        <button onclick="resetView()"><i class="fas fa-redo"></i> ري سيٽ</button>
-                        <button onclick="zoomIn()"><i class="fas fa-search-plus"></i></button>
-                        <button onclick="zoomOut()"><i class="fas fa-search-minus"></i></button>
-                        <button onclick="toggleWireframe()"><i class="fas fa-th"></i> وائر فریم</button>
+        <!-- سائيڊبار ڪنٽرولز -->
+        <aside class="sidebar glass-card" id="sidebar">
+            <!-- جينڊر سويچ -->
+            <div class="gender-switch">
+                <button class="gender-btn active" id="maleBtn" onclick="switchGender('male')">
+                    <i class="fas fa-male"></i> مرد
+                </button>
+                <button class="gender-btn" id="femaleBtn" onclick="switchGender('female')">
+                    <i class="fas fa-female"></i> عورت
+                </button>
+            </div>
+
+            <!-- سسٽم ڪنٽرولز -->
+            <h3 style="margin: 1.5rem 0 1rem; color: var(--accent-blue);">
+                <i class="fas fa-cogs"></i> جسماني نظام ڏيکاريو
+            </h3>
+
+            <div class="system-card" style="--accent-color: var(--accent-red);" data-system="skeletal">
+                <div class="system-header">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="system-icon"><i class="fas fa-bone"></i></div>
+                        <h4>هڏن جو نظام</h4>
                     </div>
+                    <div class="system-toggle active" onclick="toggleSystem('skeletal')"></div>
                 </div>
-                <div style="margin-top: 20px; text-align: center;">
-                    <p style="color: #7f8c8d; font-size: 0.9rem;">
-                        <i class="fas fa-mouse-pointer"></i> آرگن تي ڪلڪ ڪريو تفصيل ڏسڻ لاءِ. ماوس سان گھمائي سگھو ٿا.
-                    </p>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    206 هڏا، جسم جو سانچو ۽ حفاظت
+                </p>
+            </div>
+
+            <div class="system-card" style="--accent-color: var(--accent-blue);" data-system="circulatory">
+                <div class="system-header">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="system-icon"><i class="fas fa-heart"></i></div>
+                        <h4>گردش جو نظام</h4>
+                    </div>
+                    <div class="system-toggle active" onclick="toggleSystem('circulatory')"></div>
                 </div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    دل، رت جي رڳن ۽ خون جو گردش
+                </p>
+            </div>
+
+            <div class="system-card" style="--accent-color: var(--accent-green);" data-system="respiratory">
+                <div class="system-header">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="system-icon"><i class="fas fa-lungs"></i></div>
+                        <h4>ساھ جو نظام</h4>
+                    </div>
+                    <div class="system-toggle active" onclick="toggleSystem('respiratory')"></div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    ڦڦڙا، ساھ نلي ۽ آڪسيجن جي ورهه
+                </p>
+            </div>
+
+            <div class="system-card" style="--accent-color: var(--accent-yellow);" data-system="digestive">
+                <div class="system-header">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="system-icon"><i class="fas fa-stomach"></i></div>
+                        <h4>هضم جو نظام</h4>
+                    </div>
+                    <div class="system-toggle active" onclick="toggleSystem('digestive')"></div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    مٿي، کيرو، جگر، انت ۽ هضم
+                </p>
+            </div>
+
+            <div class="system-card" style="--accent-color: var(--accent-purple);" data-system="nervous">
+                <div class="system-header">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="system-icon"><i class="fas fa-brain"></i></div>
+                        <h4>اعصاب جو نظام</h4>
+                    </div>
+                    <div class="system-toggle active" onclick="toggleSystem('nervous')"></div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    دماغ، ريڙھ جي هڏي ۽ اعصاب
+                </p>
+            </div>
+
+            <div class="system-card" style="--accent-color: #ff6b6b;" data-system="reproductive">
+                <div class="system-header">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div class="system-icon"><i class="fas fa-baby"></i></div>
+                        <h4>پيدائش جو نظام</h4>
+                    </div>
+                    <div class="system-toggle active" onclick="toggleSystem('reproductive')"></div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    مرد ۽ عورت جي پيدائشي اعضا
+                </p>
             </div>
 
             <!-- آرگن انفو پينل -->
-            <div class="info-panel">
-                <h2 class="organ-title" id="selectedOrgan">دماغ</h2>
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 85%"></div>
-                    </div>
-                    <small>معلومات جي مڪملگي: 85%</small>
-                </div>
+            <div class="info-panel" id="infoPanel">
+                <h2 class="organ-title" id="organTitle">دماغ</h2>
                 
                 <div class="organ-details">
                     <div class="detail-item">
-                        <strong>ڪم:</strong>
-                        <span id="organFunction">انساني جسم جو ڪنٽرول سسٽم، سوچ، ياد، جذبا ۽ جسماني ڪنٽرول جو ذميدار.</span>
+                        <span class="detail-label">سسٽم:</span>
+                        <span id="organSystem">اعصاب جو نظام</span>
                     </div>
                     
                     <div class="detail-item">
-                        <strong>جڳهه:</strong>
-                        <span id="organLocation">ڪنڌ جي اندر، ڪروڙ جي حفاظت ۾.</span>
+                        <span class="detail-label">ڪم:</span>
+                        <span id="organFunction">انساني جسم جو ڪنٽرول سينٽر، سوچ، ياد، جذبا ۽ حرڪت جو ڪنٽرول</span>
                     </div>
                     
                     <div class="detail-item">
-                        <strong>وزن:</strong>
-                        <span id="organWeight">تقريبن 1.4 ڪلوگرام (بالغ ۾).</span>
+                        <span class="detail-label">جڳهه:</span>
+                        <span id="organLocation">ڪنڌ جي اندر، ڪروڙ جي حفاظت ۾</span>
                     </div>
                     
                     <div class="detail-item">
-                        <strong>خاصيت:</strong>
-                        <span id="organSpecialty">100 ارب کان وڌيڪ نيوران (اعصابي خلايا)، روزانو 20٪ آڪسيجن استعمال ڪري ٿو.</span>
+                        <span class="detail-label">وزن:</span>
+                        <span id="organWeight">1.4 ڪلوگرام (بالغ ۾)</span>
                     </div>
                     
                     <div class="detail-item">
-                        <strong>بيماريون:</strong>
-                        <span id="organDiseases">ذھانت جي بيماري، اسٽروڪ، مائيگرين، پريشر.</span>
+                        <span class="detail-label">خاصيت:</span>
+                        <span id="organSpecialty">100 ارب کان وڌيڪ نيوران، روزانو 20٪ آڪسيجن استعمال</span>
                     </div>
                 </div>
                 
-                <button onclick="showOrganDetails('brain')" style="background: var(--secondary-color); color: white; border: none; padding: 12px 20px; border-radius: 8px; width: 100%; margin-top: 20px; cursor: pointer;">
-                    <i class="fas fa-book-medical"></i> وڌيڪ تفصيل
-                </button>
+                <div class="progress-container">
+                    <div class="progress-fill" style="width: 85%"></div>
+                </div>
+                <small style="color: var(--text-secondary);">معلومات جي مڪملگي: 85%</small>
             </div>
-        </section>
-
-        <!-- باڊي سسٽم ڪارڊس -->
-        <section id="systems">
-            <h2 style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 30px; text-align: center;">انساني جسم جا سسٽم</h2>
-            
-            <div class="systems-grid">
-                <!-- اعصابي سسٽم -->
-                <div class="system-card" onclick="showSystem('nervous')" style="border-top-color: #9b59b6;">
-                    <div class="system-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3>اعصابي سسٽم</h3>
-                    <p>دماغ، ريڙھ جي هڏي ۽ اعصاب جو مجموعو</p>
-                    <div style="margin-top: 15px;">
-                        <span class="organ-count">5 آرگن</span>
-                    </div>
-                </div>
-
-                <!-- گردش سسٽم -->
-                <div class="system-card" onclick="showSystem('circulatory')" style="border-top-color: #e74c3c;">
-                    <div class="system-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <h3>گردش سسٽم</h3>
-                    <p>دل، رت جي رڳن ۽ رت جو نظام</p>
-                    <div style="margin-top: 15px;">
-                        <span class="organ-count">3 آرگن</span>
-                    </div>
-                </div>
-
-                <!-- ھضم سسٽم -->
-                <div class="system-card" onclick="showSystem('digestive')" style="border-top-color: #3498db;">
-                    <div class="system-icon">
-                        <i class="fas fa-stomach"></i>
-                    </div>
-                    <h3>ھضم سسٽم</h3>
-                    <p>کاڌي کي هضم ڪرڻ جو مڪمل نظام</p>
-                    <div style="margin-top: 15px;">
-                        <span class="organ-count">8 آرگن</span>
-                    </div>
-                </div>
-
-                <!-- ساھ سسٽم -->
-                <div class="system-card" onclick="showSystem('respiratory')" style="border-top-color: #2ecc71;">
-                    <div class="system-icon">
-                        <i class="fas fa-lungs"></i>
-                    </div>
-                    <h3>ساھ سسٽم</h3>
-                    <p>ساھ وٺڻ ۽ ڇڏڻ جو نظام</p>
-                    <div style="margin-top: 15px;">
-                        <span class="organ-count">6 آرگن</span>
-                    </div>
-                </div>
-
-                <!-- عضلاتي سسٽم -->
-                <div class="system-card" onclick="showSystem('muscular')" style="border-top-color: #f39c12;">
-                    <div class="system-icon">
-                        <i class="fas fa-dumbbell"></i>
-                    </div>
-                    <h3>عضلاتي سسٽم</h3>
-                    <p>عضلا، هڏا ۽ جوڙن جو نظام</p>
-                    <div style="margin-top: 15px;">
-                        <span class="organ-count">3 آرگن</span>
-                    </div>
-                </div>
-
-                <!-- خارجي سسٽم -->
-                <div class="system-card" onclick="showSystem('excretory')" style="border-top-color: #8e44ad;">
-                    <div class="system-icon">
-                        <i class="fas fa-kidneys"></i>
-                    </div>
-                    <h3>خارجي سسٽم</h3>
-                    <p>فضلا خارج ڪرڻ جو نظام</p>
-                    <div style="margin-top: 15px;">
-                        <span class="organ-count">4 آرگن</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- آرگن ڊيٽيلس سيڪشن -->
-        <section id="organs" style="margin-top: 60px;">
-            <h2 style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 30px; text-align: center;">مشهور آرگن جا تفصيل</h2>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                <!-- دل -->
-                <div class="organ-mini-card" onclick="showOrganDetails('heart')" style="background: white; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s ease; border-left: 5px solid #e74c3c;">
-                    <div style="color: #e74c3c; font-size: 2rem; margin-bottom: 10px;">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <h3 style="color: var(--primary-color);">دل</h3>
-                    <p style="color: #7f8c8d; font-size: 0.9rem;">رت گردش ڪندڙ پمپ</p>
-                </div>
-
-                <!-- جگر -->
-                <div class="organ-mini-card" onclick="showOrganDetails('liver')" style="background: white; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s ease; border-left: 5px solid #2ecc71;">
-                    <div style="color: #2ecc71; font-size: 2rem; margin-bottom: 10px;">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <h3 style="color: var(--primary-color);">جگر</h3>
-                    <p style="color: #7f8c8d; font-size: 0.9rem;">جسم جو وڏو آرگن</p>
-                </div>
-
-                <!-- ڦڦڙا -->
-                <div class="organ-mini-card" onclick="showOrganDetails('lungs')" style="background: white; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s ease; border-left: 5px solid #3498db;">
-                    <div style="color: #3498db; font-size: 2rem; margin-bottom: 10px;">
-                        <i class="fas fa-lungs"></i>
-                    </div>
-                    <h3 style="color: var(--primary-color);">ڦڦڙا</h3>
-                    <p style="color: #7f8c8d; font-size: 0.9rem;">ساھ وٺڻ جو آرگن</p>
-                </div>
-
-                <!-- گردا -->
-                <div class="organ-mini-card" onclick="showOrganDetails('kidneys')" style="background: white; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s ease; border-left: 5px solid #8e44ad;">
-                    <div style="color: #8e44ad; font-size: 2rem; margin-bottom: 10px;">
-                        <i class="fas fa-filter"></i>
-                    </div>
-                    <h3 style="color: var(--primary-color);">گردا</h3>
-                    <p style="color: #7f8c8d; font-size: 0.9rem;">خون صاف ڪندڙ</p>
-                </div>
-            </div>
-        </section>
+        </aside>
     </div>
 
-    <!-- آرگن ڊيٽيلس موڊل -->
-    <div class="organ-modal" id="organModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 class="organ-title" id="modalOrganTitle">دماغ</h2>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
-                <div>
-                    <h3 style="color: var(--primary-color); margin-bottom: 15px;">بنيادي معلومات</h3>
-                    <div id="modalBasicInfo">
-                        <!-- بنيادي معلومات هتي لوڊ ٿيندي -->
-                    </div>
-                    
-                    <h3 style="color: var(--primary-color); margin: 25px 0 15px;">بيماريون ۽ علاج</h3>
-                    <div id="modalDiseases">
-                        <!-- بيماريون هتي لوڊ ٿيندي -->
-                    </div>
-                </div>
-                
-                <div>
-                    <h3 style="color: var(--primary-color); margin-bottom: 15px;">ڪم جو طريقو</h3>
-                    <div id="modalFunction">
-                        <!-- ڪم جو طريقو هتي لوڊ ٿيندي -->
-                    </div>
-                    
-                    <h3 style="color: var(--primary-color); margin: 25px 0 15px;">اهميت</h3>
-                    <div id="modalImportance">
-                        <!-- اهميت هتي لوڊ ٿيندي -->
-                    </div>
-                </div>
-            </div>
-            
-            <div style="margin-top: 30px;">
-                <canvas id="organChart" height="100"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- فٽر -->
-    <footer id="about">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 30px;">
-                <div>
-                    <h3 style="color: white; margin-bottom: 15px;">انساني جسم جو گائيڊ</h3>
-                    <p style="color: #bdc3c7;">سنڌي ۾ آناتومي جي تعليم لاءِ پهرين انٽرايڪٽو پليٽ فارم. طالب علمن، ڊاڪٽرن ۽ عوام لاءِ مفت تعليمي وسيلو.</p>
-                </div>
-                
-                <div>
-                    <h3 style="color: white; margin-bottom: 15px;">تيز لنڪس</h3>
-                    <ul style="list-style: none; color: #bdc3c7;">
-                        <li style="margin-bottom: 8px;"><a href="#home" style="color: #bdc3c7; text-decoration: none;">گهر</a></li>
-                        <li style="margin-bottom: 8px;"><a href="#systems" style="color: #bdc3c7; text-decoration: none;">سسٽم</a></li>
-                        <li style="margin-bottom: 8px;"><a href="#organs" style="color: #bdc3c7; text-decoration: none;">آرگن</a></li>
-                        <li style="margin-bottom: 8px;"><a href="#quiz" style="color: #bdc3c7; text-decoration: none;">ڪوئز</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 style="color: white; margin-bottom: 15px;">ڪنٽيڪٽ</h3>
-                    <p style="color: #bdc3c7;"><i class="fas fa-envelope" style="margin-left: 10px;"></i> info@sindhianatomy.com</p>
-                    <p style="color: #bdc3c7;"><i class="fas fa-phone" style="margin-left: 10px;"></i> +92 300 1234567</p>
-                </div>
-            </div>
-            
-            <div style="text-align: center; padding-top: 20px; border-top: 1px solid #34495e;">
-                <p style="color: #bdc3c7;">© 2025 انساني جسم جو سنڌي گائيڊ. سڀ حق محفوظ.</p>
-                <p style="color: #95a5a6; font-size: 0.9rem; margin-top: 10px;">سنڌي ٻوليءَ ۾ سائنسي تعليم جي واڌاري لاءِ.</p>
-            </div>
-        </div>
-    </footer>
-
+    <!-- سنڌي ڊيٽا سڀ جاوااسڪرپٽ ۾ -->
     <script>
-        // 3D ماڊل جو سيٽپ
-        let scene, camera, renderer, controls;
-        let currentModel = null;
-        
-        // آرگن جي ڊيٽا
-        const organData = {
+        // سنڌي ۾ آرگن ڊيٽا
+        const organDataSindhi = {
             'brain': {
                 name: 'دماغ',
-                function: 'انساني جسم جو ڪنٽرول سسٽم، سوچ، ياد، جذبا ۽ جسماني ڪنٽرول جو ذميدار.',
-                location: 'ڪنڌ جي اندر، ڪروڙ جي حفاظت ۾.',
-                weight: 'تقريبن 1.4 ڪلوگرام (بالغ ۾).',
-                specialty: '100 ارب کان وڌيڪ نيوران (اعصابي خلايا)، روزانو 20٪ آڪسيجن استعمال ڪري ٿو.',
-                diseases: 'ذھانت جي بيماري، اسٽروڪ، مائيگرين، پريشر.',
-                system: 'اعصابي سسٽم',
-                color: '#9b59b6'
+                system: 'اعصاب جو نظام',
+                function: 'انساني جسم جو ڪنٽرول سينٽر، سوچ، ياد، جذبا، حرڪت جو ڪنٽرول، سنس وصولي ۽ بنيادي جسماني ڪمن جو انتظام',
+                location: 'ڪنڌ جي اندر، ڪروڙ جي حفاظت ۾',
+                weight: '1.4 ڪلوگرام (بالغ ۾)',
+                specialty: '100 ارب کان وڌيڪ نيوران، روزانو 20-25٪ آڪسيجن استعمال ڪري ٿو، 100 ٽريليئن سيناپسز',
+                color: 0x9d4edd,
+                glowColor: 0xff00ff
             },
             'heart': {
                 name: 'دل',
-                function: 'رت کي سڄي جسم ۾ گردش ڪرائيندڙ پمپ.',
-                location: 'ڇاتي جي وچ ۾، کاٻي پاسي.',
-                weight: '250-350 گرام (بالغ ۾).',
-                specialty: 'روزانو 100,000 ڀيرا ڌڙڪندو آهي، 7,000 ليٽر رت گردش ڪري ٿو.',
-                diseases: 'دل جو دورو، بلڊ پريشر، دل جي بيماريون.',
-                system: 'گردش سسٽم',
-                color: '#e74c3c'
-            },
-            'liver': {
-                name: 'جگر',
-                function: 'خوراک جو هضم، زهرن کي ختم ڪرڻ، پروٽين جو خاڪو.',
-                location: 'ڪمربند جي مٿئين حصي ۾، ساڄي پاسي.',
-                weight: '1.5 ڪلوگرام تقريباً.',
-                specialty: 'جسم جو وڏو آرگن، پنھنجو ٻيهر پيدا ٿيڻ جو خاصيت.',
-                diseases: 'جگر جو سور، جگر جو سرطان، ھيپاٽائٽس.',
-                system: 'ھضم سسٽم',
-                color: '#2ecc71'
+                system: 'گردش جو نظام',
+                function: 'رت کي سڄي جسم ۾ پمپ ڪندڙ، آڪسيجن ۽ غذائيت جو ورهه',
+                location: 'ڇاتي جي وچ ۾، کاٻي پاسي ۾',
+                weight: '250-350 گرام',
+                specialty: 'روزانو 100,000 ڀيرا ڌڙڪندو، 7,000 ليٽر رت گردش ڪري ٿو',
+                color: 0xff4757,
+                glowColor: 0xff0000
             },
             'lungs': {
                 name: 'ڦڦڙا',
-                function: 'ساھ وٺڻ ۽ آڪسيجن کي خون ۾ داخل ڪرڻ.',
-                location: 'ڇاتي جي اندر، پسليون جي حفاظت ۾.',
-                weight: '500-600 گرام هر ڦڦڙو.',
-                specialty: '30 کان 40 کروڙ ايڇولي (ھوا جي تھن) تي مشتمل.',
-                diseases: 'دمہ، نمونيا، ٽي بي، ڦڦڙن جو سرطان.',
-                system: 'ساھ سسٽم',
-                color: '#3498db'
+                system: 'ساھ جو نظام',
+                function: 'آڪسيجن داخل ڪرڻ ۽ ڪاربان ڊاءِ آڪسائيڊ خارج ڪرڻ',
+                location: 'ڇاتي ۾، پسليون جي پويان',
+                weight: '500-600 گرام هر هڪ',
+                specialty: '30-40 کروڙ ايڇولي، 70 چورس ميٽر سطحي ايريا',
+                color: 0x00ff9d,
+                glowColor: 0x00ff00
+            },
+            'liver': {
+                name: 'جگر',
+                system: 'هضم جو نظام',
+                function: 'خوراک جو هضم، زهرن جو خاتمو، پروٽين ٺاھڻ، بلڊ شوگر ڪنٽرول',
+                location: 'ڪمربند جي مٿئين حصي ۾، ساڄي پاسي',
+                weight: '1.5 ڪلوگرام',
+                specialty: 'جسم جو وڏو آرگن، پنھنجو ٻيهر پيدا ٿيڻ جي صلاحيت',
+                color: 0xffd166,
+                glowColor: 0xffff00
             },
             'kidneys': {
                 name: 'گردا',
-                function: 'خون مان فضلا صاف ڪرڻ، پيشاب ٺاھڻ.',
-                location: 'ريڙھ جي هڏي جي پٺيان، پهريون ڪمربند.',
-                weight: '125-170 گرام هر گردو.',
-                specialty: 'روزانو 180 ليٽر خون صاف ڪن ٿا، 1-2 ليٽر پيشاب ٺاهين ٿا.',
-                diseases: 'گردن جي پٿري، گردن جو ڦٽڻ، گردن جي سوزش.',
-                system: 'خارجي سسٽم',
-                color: '#8e44ad'
+                system: 'خارجي نظام',
+                function: 'خون مان فضلا صاف ڪرڻ، پيشاب ٺاھڻ، بلڊ پريشر ڪنٽرول',
+                location: 'ريڙھ جي هڏي جي پويان، پهريون ڪمربند',
+                weight: '125-170 گرام هر هڪ',
+                specialty: 'روزانو 180 ليٽر خون صاف ڪن ٿا، 1-2 ليٽر پيشاب ٺاهين ٿا',
+                color: 0x00d4ff,
+                glowColor: 0x00ffff
+            },
+            'stomach': {
+                name: 'کيرو',
+                system: 'هضم جو نظام',
+                function: 'خوراک کي ھضم ڪرڻ، ايسڊ سان ڪم ڪرڻ، پروٽين هضم',
+                location: 'ڇاتي جي هيٺان، کاٻي پاسي',
+                weight: '150-200 گرام (خالي)، 1-1.5 ليٽر گنجائش',
+                specialty: 'خوراک کي گيسٽرڪ جوس سان ھضم ڪري ٿو',
+                color: 0xff8e53,
+                glowColor: 0xff8800
+            },
+            'spine': {
+                name: 'ريڙھ جي هڏي',
+                system: 'هڏن جو نظام',
+                function: 'جسم جو سانچو، اعصاب جي حفاظت، حرڪت ۾ مدد',
+                location: 'پٺي جي وچ ۾، ڪنڌ کان ڪمربند تائين',
+                weight: '1 ڪلوگرام (33 هڏا)',
+                specialty: '33 ورٽيبرا، مرڪزي اعصابي نظام جي حفاظت',
+                color: 0xffffff,
+                glowColor: 0xcccccc
+            },
+            'bones': {
+                name: 'هڏا',
+                system: 'هڏن جو نظام',
+                function: 'جسم جو سانچو، عضلن جو سهارو، اندروني آرگنن جي حفاظت',
+                location: 'سڄي جسم ۾',
+                weight: '15٪ جسم جو وزن (بالغ ۾)',
+                specialty: '206 هڏا، ڪيلشيم جو ذخيرو، خون جا خلايا پيدا ڪرڻ',
+                color: 0xf0f0f0,
+                glowColor: 0xffffff
+            },
+            'intestines': {
+                name: 'انت',
+                system: 'هضم جو نظام',
+                function: 'خوراک مان غذائيت جذب ڪرڻ، فضلا خارج ڪرڻ',
+                location: 'پيٽ جي اندر',
+                weight: '2 ڪلوگرام',
+                specialty: '7-9 ميٽر ڊگھائي، مائڪروبيوم جو گھر',
+                color: 0xffa726,
+                glowColor: 0xffaa00
             }
         };
 
-        // سسٽم جي ڊيٽا
-        const systemData = {
-            'nervous': {
-                name: 'اعصابي سسٽم',
-                organs: ['دماغ', 'ريڙھ جي هڏي', 'اعصاب'],
-                function: 'جسم جي سڀني ڪمن جو ڪنٽرول ۽ هم آھنگي',
-                color: '#9b59b6'
-            },
-            'circulatory': {
-                name: 'گردش سسٽم',
-                organs: ['دل', 'رت جي رڳون', 'رت'],
-                function: 'آڪسيجن، غذائيت ۽ هارمون جو جسم ۾ ورهه',
-                color: '#e74c3c'
-            },
-            'digestive': {
-                name: 'ھضم سسٽم',
-                organs: ['مٿي', 'کيرو', 'جگر', 'پت جي تھيلي', 'لڳل انت', 'ڊگھو انت', 'رڪٽم'],
-                function: 'خوراک کي هضم ڪرڻ ۽ غذائيت جذب ڪرڻ',
-                color: '#3498db'
-            },
-            'respiratory': {
-                name: 'ساھ سسٽم',
-                organs: ['ناڪ', 'ڳچي', 'ساھ نلي', 'ڦڦڙا'],
-                function: 'آڪسيجن وٺڻ ۽ ڪاربان ڊاءِ آڪسائيڊ خارج ڪرڻ',
-                color: '#2ecc71'
-            }
+        // Three.js واري سيٽ اپ
+        let scene, camera, renderer, controls;
+        let raycaster, mouse;
+        let currentGender = 'male';
+        let xRayMode = false;
+        let selectedOrgan = null;
+        let organMeshes = {};
+        let systemsVisibility = {
+            skeletal: true,
+            circulatory: true,
+            respiratory: true,
+            digestive: true,
+            nervous: true,
+            reproductive: true
         };
 
-        // انيشلائيز 3D ويوور
-        function initViewer() {
+        // لوڊنگ پروگرس
+        let loadingProgress = 0;
+        const totalOrgans = Object.keys(organDataSindhi).length;
+
+        // انيشلائيز Three.js سيٽ اپ
+        function init() {
             // سين ٺاهيو
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xf0f0f0);
-            
+            scene.background = new THREE.Color(0x0a0e17);
+            scene.fog = new THREE.Fog(0x0a0e17, 10, 100);
+
             // ڪئميرا ٺاهيو
-            camera = new THREE.PerspectiveCamera(75, document.getElementById('model-container').offsetWidth / document.getElementById('model-container').offsetHeight, 0.1, 1000);
-            camera.position.z = 5;
-            
+            camera = new THREE.PerspectiveCamera(
+                60,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                1000
+            );
+            camera.position.set(0, 10, 20);
+            camera.lookAt(0, 0, 0);
+
             // رينڊرر ٺاهيو
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(document.getElementById('model-container').offsetWidth, document.getElementById('model-container').offsetHeight);
-            document.getElementById('model-container').appendChild(renderer.domElement);
-            
-            // ڪنٽرول ٺاهيو
+            renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('three-canvas'),
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            // اوربيٽ ڪنٽرولز
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
-            
-            // روشني ٺاهيو
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
-            
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(10, 10, 5);
-            scene.add(directionalLight);
-            
-            // سادو جسم جو ماڊل ٺاهيو (جيڪڏهن 3D ماڊل موجود نه آهي)
-            createSimpleHumanModel();
-            
-            // اينيميشن لوپ
-            function animate() {
-                requestAnimationFrame(animate);
-                controls.update();
-                renderer.render(scene, camera);
-            }
-            animate();
-            
+            controls.minDistance = 5;
+            controls.maxDistance = 50;
+            controls.maxPolarAngle = Math.PI / 2;
+            controls.autoRotate = false;
+
+            // روشنيون ٺاهيو
+            setupLights();
+
+            // ريسٽر ۽ ماوس
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            // آرگن ٺاهيو
+            createHumanBody();
+
+            // ايڪس رے موڊ لاءِ شيڊر
+            setupXRayShader();
+
             // ري سائز ايڊيٽر
-            window.addEventListener('resize', function() {
-                camera.aspect = document.getElementById('model-container').offsetWidth / document.getElementById('model-container').offsetHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(document.getElementById('model-container').offsetWidth, document.getElementById('model-container').offsetHeight);
-            });
+            window.addEventListener('resize', onWindowResize);
+
+            // ماوس ايڊيٽرز
+            renderer.domElement.addEventListener('mousemove', onMouseMove);
+            renderer.domElement.addEventListener('click', onClick);
+
+            // لوڊنگ ڊسپلے ختم ڪريو
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                }, 300);
+            }, 1000);
+
+            // اينيميشن لوپ شروع ڪريو
+            animate();
         }
 
-        // سادو انسان جو ماڊل ٺاهيو
-        function createSimpleHumanModel() {
-            // جسم جو گولڊ (شکل)
-            const bodyGeometry = new THREE.SphereGeometry(1, 32, 32);
-            const bodyMaterial = new THREE.MeshPhongMaterial({ 
+        // روشنيون سيٽ اپ ڪريو
+        function setupLights() {
+            // امبيئنٽ روشني
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+            scene.add(ambientLight);
+
+            // ڊائريڪشنل روشني
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 20, 10);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+
+            // پوائنٽ روشني (خاص گلوزنگ لاءِ)
+            const pointLight = new THREE.PointLight(0x00d4ff, 0.5, 100);
+            pointLight.position.set(0, 10, 0);
+            scene.add(pointLight);
+
+            // ايميشينٽ گلوه
+            const glowLight = new THREE.PointLight(0x9d4edd, 0.3, 50);
+            glowLight.position.set(0, 5, 0);
+            scene.add(glowLight);
+        }
+
+        // انساني جسم جو ماڊل ٺاهيو
+        function createHumanBody() {
+            // بنيادي جسماني شڪل (ڪنڊو)
+            createTorso();
+            
+            // سسٽم وارا آرگن ٺاهيو
+            createSkeletalSystem();
+            createCirculatorySystem();
+            createRespiratorySystem();
+            createDigestiveSystem();
+            createNervousSystem();
+            createReproductiveSystem();
+        }
+
+        // ڪنڊو ٺاهيو (بنيادي جسم)
+        function createTorso() {
+            const torsoGeometry = new THREE.CylinderGeometry(2, 1.5, 8, 16);
+            const torsoMaterial = new THREE.MeshPhongMaterial({
                 color: 0xffcc99,
+                transparent: true,
+                opacity: 0.3,
+                side: THREE.DoubleSide
+            });
+            const torso = new THREE.Mesh(torsoGeometry, torsoMaterial);
+            torso.position.y = 4;
+            torso.castShadow = true;
+            torso.receiveShadow = true;
+            torso.name = 'torso';
+            scene.add(torso);
+
+            // سر ٺاهيو
+            const headGeometry = new THREE.SphereGeometry(1.2, 32, 32);
+            const headMaterial = new THREE.MeshPhongMaterial({
+                color: 0xffcc99,
+                transparent: true,
+                opacity: 0.3
+            });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.y = 8.5;
+            head.castShadow = true;
+            head.name = 'head';
+            scene.add(head);
+
+            // بازو ٺاهيو
+            createArms();
+            createLegs();
+        }
+
+        // بازو ٺاهيو
+        function createArms() {
+            const armGeometry = new THREE.CylinderGeometry(0.3, 0.2, 3, 8);
+            const armMaterial = new THREE.MeshPhongMaterial({
+                color: 0xffcc99,
+                transparent: true,
+                opacity: 0.3
+            });
+
+            // کاٻو بازو
+            const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+            leftArm.position.set(-2.5, 6, 0);
+            leftArm.rotation.z = Math.PI / 4;
+            leftArm.castShadow = true;
+            leftArm.name = 'leftArm';
+            scene.add(leftArm);
+
+            // ساڄو بازو
+            const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+            rightArm.position.set(2.5, 6, 0);
+            rightArm.rotation.z = -Math.PI / 4;
+            rightArm.castShadow = true;
+            rightArm.name = 'rightArm';
+            scene.add(rightArm);
+        }
+
+        // ٽنگون ٺاهيو
+        function createLegs() {
+            const legGeometry = new THREE.CylinderGeometry(0.4, 0.3, 4, 8);
+            const legMaterial = new THREE.MeshPhongMaterial({
+                color: 0xffcc99,
+                transparent: true,
+                opacity: 0.3
+            });
+
+            // کاٻي ٽنگ
+            const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
+            leftLeg.position.set(-0.8, 0, 0);
+            leftLeg.castShadow = true;
+            leftLeg.name = 'leftLeg';
+            scene.add(leftLeg);
+
+            // ساڄي ٽنگ
+            const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
+            rightLeg.position.set(0.8, 0, 0);
+            rightLeg.castShadow = true;
+            rightLeg.name = 'rightLeg';
+            scene.add(rightLeg);
+        }
+
+        // هڏن جو نظام ٺاهيو
+        function createSkeletalSystem() {
+            // ريڙھ جي هڏي
+            const spineGeometry = new THREE.CylinderGeometry(0.3, 0.3, 7, 8);
+            const spineMaterial = new THREE.MeshPhongMaterial({
+                color: organDataSindhi.spine.color,
+                transparent: true,
+                opacity: 0.8,
+                shininess: 100
+            });
+            const spine = new THREE.Mesh(spineGeometry, spineMaterial);
+            spine.position.y = 3.5;
+            spine.castShadow = true;
+            spine.name = 'spine';
+            spine.userData = { organ: 'spine' };
+            organMeshes.spine = spine;
+            scene.add(spine);
+
+            // پسليون
+            for (let i = 0; i < 12; i++) {
+                const ribGeometry = new THREE.CylinderGeometry(0.05, 0.05, 2, 8);
+                const ribMaterial = new THREE.MeshPhongMaterial({
+                    color: organDataSindhi.bones.color,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const rib = new THREE.Mesh(ribGeometry, ribMaterial);
+                rib.position.set(0, 4 + i * 0.5, 0);
+                rib.rotation.z = Math.PI / 2;
+                rib.scale.x = 0.8 + Math.sin(i * 0.5) * 0.3;
+                rib.castShadow = true;
+                rib.name = `rib_${i}`;
+                rib.userData = { organ: 'bones' };
+                scene.add(rib);
+            }
+
+            // ڪنڌ جي هڏي
+            const neckGeometry = new THREE.CylinderGeometry(0.2, 0.2, 1, 8);
+            const neck = new THREE.Mesh(neckGeometry, spineMaterial);
+            neck.position.y = 7.5;
+            neck.castShadow = true;
+            neck.name = 'neck';
+            scene.add(neck);
+
+            // ڪروڙ
+            const skullGeometry = new THREE.SphereGeometry(1, 32, 32);
+            const skull = new THREE.Mesh(skullGeometry, spineMaterial);
+            skull.position.y = 8.5;
+            skull.castShadow = true;
+            skull.name = 'skull';
+            scene.add(skull);
+
+            updateLoadingProgress();
+        }
+
+        // گردش جو نظام ٺاهيو
+        function createCirculatorySystem() {
+            // دل
+            const heartGeometry = new THREE.SphereGeometry(0.8, 32, 32);
+            const heartMaterial = new THREE.MeshPhongMaterial({
+                color: organDataSindhi.heart.color,
+                transparent: true,
+                opacity: 0.9,
+                shininess: 100
+            });
+            const heart = new THREE.Mesh(heartGeometry, heartMaterial);
+            heart.position.set(0.5, 5.5, 0.5);
+            heart.castShadow = true;
+            heart.name = 'heart';
+            heart.userData = { organ: 'heart' };
+            organMeshes.heart = heart;
+            scene.add(heart);
+
+            // وڏي رت واري رڳ (ايوٽا)
+            const aortaCurve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(0.5, 6, 0.5),
+                new THREE.Vector3(0.5, 8, 0.3),
+                new THREE.Vector3(0.3, 8.5, 0)
+            ]);
+
+            const aortaGeometry = new THREE.TubeGeometry(aortaCurve, 20, 0.1, 8, false);
+            const aortaMaterial = new THREE.MeshPhongMaterial({
+                color: 0xff0000,
                 transparent: true,
                 opacity: 0.8
             });
-            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-            scene.add(body);
-            
-            // آرگن جو ماڊل ٺاهيو
-            createOrgan('brain', 0, 1.8, 0, 0.3, organData.brain.color);
-            createOrgan('heart', 0.3, 1, 0.2, 0.25, organData.heart.color);
-            createOrgan('lungs', 0, 1.2, 0.4, 0.35, organData.lungs.color);
-            createOrgan('liver', 0.4, 0.8, -0.2, 0.3, organData.liver.color);
-            createOrgan('kidneys', -0.3, 0.5, 0.3, 0.2, organData.kidneys.color);
+            const aorta = new THREE.Mesh(aortaGeometry, aortaMaterial);
+            aorta.castShadow = true;
+            aorta.name = 'aorta';
+            scene.add(aorta);
+
+            // رت جي رڳن جو جال
+            createBloodVessels();
+
+            updateLoadingProgress();
         }
 
-        // آرگن ٺاهيو
-        function createOrgan(id, x, y, z, size, color) {
-            const geometry = new THREE.SphereGeometry(size, 16, 16);
-            const material = new THREE.MeshPhongMaterial({ 
-                color: color,
+        // ساھ جو نظام ٺاهيو
+        function createRespiratorySystem() {
+            // کاٻو ڦڦڙو
+            const leftLungGeometry = createLungGeometry();
+            const lungMaterial = new THREE.MeshPhongMaterial({
+                color: organDataSindhi.lungs.color,
+                transparent: true,
+                opacity: 0.9,
+                shininess: 50
+            });
+            const leftLung = new THREE.Mesh(leftLungGeometry, lungMaterial);
+            leftLung.position.set(-1.2, 5, 0);
+            leftLung.rotation.z = -0.2;
+            leftLung.castShadow = true;
+            leftLung.name = 'leftLung';
+            leftLung.userData = { organ: 'lungs' };
+            organMeshes.leftLung = leftLung;
+            scene.add(leftLung);
+
+            // ساڄو ڦڦڙو
+            const rightLungGeometry = createLungGeometry();
+            const rightLung = new THREE.Mesh(rightLungGeometry, lungMaterial);
+            rightLung.position.set(1.2, 5, 0);
+            rightLung.rotation.z = 0.2;
+            rightLung.castShadow = true;
+            rightLung.name = 'rightLung';
+            rightLung.userData = { organ: 'lungs' };
+            organMeshes.rightLung = rightLung;
+            scene.add(rightLung);
+
+            // ساھ نلي
+            const tracheaGeometry = new THREE.CylinderGeometry(0.15, 0.15, 3, 8);
+            const tracheaMaterial = new THREE.MeshPhongMaterial({
+                color: 0x00ff9d,
+                transparent: true,
+                opacity: 0.8
+            });
+            const trachea = new THREE.Mesh(tracheaGeometry, tracheaMaterial);
+            trachea.position.set(0, 6.5, 0.2);
+            trachea.castShadow = true;
+            trachea.name = 'trachea';
+            scene.add(trachea);
+
+            updateLoadingProgress();
+        }
+
+        // ڦڦڙي جي جيوميٽري ٺاهيو
+        function createLungGeometry() {
+            const shape = new THREE.Shape();
+            shape.moveTo(0, 0);
+            shape.quadraticCurveTo(0.5, 0.5, 1, 0);
+            shape.quadraticCurveTo(1.5, -0.5, 1, -1);
+            shape.quadraticCurveTo(0.5, -1.5, 0, -1);
+            shape.quadraticCurveTo(-0.5, -0.5, 0, 0);
+
+            const extrudeSettings = {
+                steps: 2,
+                depth: 1,
+                bevelEnabled: true,
+                bevelThickness: 0.1,
+                bevelSize: 0.1,
+                bevelSegments: 1
+            };
+
+            return new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        }
+
+        // هضم جو نظام ٺاهيو
+        function createDigestiveSystem() {
+            // جگر
+            const liverGeometry = createLiverGeometry();
+            const liverMaterial = new THREE.MeshPhongMaterial({
+                color: organDataSindhi.liver.color,
+                transparent: true,
+                opacity: 0.9,
+                shininess: 80
+            });
+            const liver = new THREE.Mesh(liverGeometry, liverMaterial);
+            liver.position.set(1.5, 3.5, -0.5);
+            liver.rotation.z = -0.3;
+            liver.castShadow = true;
+            liver.name = 'liver';
+            liver.userData = { organ: 'liver' };
+            organMeshes.liver = liver;
+            scene.add(liver);
+
+            // کيرو
+            const stomachGeometry = createStomachGeometry();
+            const stomachMaterial = new THREE.MeshPhongMaterial({
+                color: organDataSindhi.stomach.color,
+                transparent: true,
+                opacity: 0.9,
+                shininess: 80
+            });
+            const stomach = new THREE.Mesh(stomachGeometry, stomachMaterial);
+            stomach.position.set(-0.5, 4, -0.3);
+            stomach.castShadow = true;
+            stomach.name = 'stomach';
+            stomach.userData = { organ: 'stomach' };
+            organMeshes.stomach = stomach;
+            scene.add(stomach);
+
+            // انت
+            createIntestines();
+
+            updateLoadingProgress();
+        }
+
+        // جگر جي جيوميٽري ٺاهيو
+        function createLiverGeometry() {
+            const geometry = new THREE.BoxGeometry(1.5, 0.8, 0.6);
+            geometry.translate(0, 0, 0);
+            return geometry;
+        }
+
+        // کيري جي جيوميٽري ٺاهيو
+        function createStomachGeometry() {
+            const geometry = new THREE.SphereGeometry(0.6, 32, 32, 0, Math.PI * 2, 0, Math.PI);
+            geometry.scale(1, 1.5, 1);
+            return geometry;
+        }
+
+        // انت ٺاهيو
+        function createIntestines() {
+            const curve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(-0.5, 3.5, -0.2),
+                new THREE.Vector3(0, 3, -0.3),
+                new THREE.Vector3(0.5, 2.5, -0.2),
+                new THREE.Vector3(0, 2, -0.3),
+                new THREE.Vector3(-0.5, 1.5, -0.2),
+                new THREE.Vector3(0, 1, -0.3)
+            ]);
+
+            const tubeGeometry = new THREE.TubeGeometry(curve, 64, 0.15, 8, false);
+            const intestineMaterial = new THREE.MeshPhongMaterial({
+                color: organDataSindhi.intestines.color,
                 transparent: true,
                 opacity: 0.9
             });
-            const organ = new THREE.Mesh(geometry, material);
-            organ.position.set(x, y, z);
-            organ.userData = { id: id, name: organData[id]?.name || id };
-            
-            // ايڊ ايفينٽ لسٽنر
-            organ.material.color.setHex(parseInt(color.replace('#', ''), 16));
-            
-            scene.add(organ);
-            
-            // ري اسٽور اصل رنگ
-            const originalColor = organ.material.color.clone();
-            
-            // راستر
-            const raycaster = new THREE.Raycaster();
-            const mouse = new THREE.Vector2();
-            
-            // ماوس ايڊيٽر
-            function onMouseMove(event) {
-                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-                
-                raycaster.setFromCamera(mouse, camera);
-                const intersects = raycaster.intersectObjects(scene.children);
-                
-                // سڀني آرگنن کي ري سيٽ ڪريو
-                scene.children.forEach(child => {
-                    if (child.userData && child.userData.id) {
-                        child.material.color.set(originalColor);
-                        child.scale.set(1, 1, 1);
-                    }
-                });
-                
-                // هائيلائيٽ انٽرسڪٽ آرگن
-                if (intersects.length > 0 && intersects[0].object.userData && intersects[0].object.userData.id) {
-                    const intersectedOrgan = intersects[0].object;
-                    intersectedOrgan.material.color.set(0xffff00); // پيلو رنگ
-                    intersectedOrgan.scale.set(1.2, 1.2, 1.2);
-                    
-                    // آرگن جي نالي جو ٽولٽپ ڏيکاريو
-                    document.body.style.cursor = 'pointer';
-                } else {
-                    document.body.style.cursor = 'default';
-                }
+            const intestines = new THREE.Mesh(tubeGeometry, intestineMaterial);
+            intestines.castShadow = true;
+            intestines.name = 'intestines';
+            intestines.userData = { organ: 'intestines' };
+            organMeshes.intestines = intestines;
+            scene.add(intestines);
+        }
+
+        // اعصاب جو نظام ٺاهيو
+        function createNervousSystem() {
+            // دماغ
+            const brainGeometry = new THREE.SphereGeometry(1, 32, 32);
+            const brainMaterial = new THREE.MeshPhongMaterial({
+                color: organDataSindhi.brain.color,
+                transparent: true,
+                opacity: 0.9,
+                shininess: 150,
+                emissive: 0x9d4edd,
+                emissiveIntensity: 0.2
+            });
+            const brain = new THREE.Mesh(brainGeometry, brainMaterial);
+            brain.position.y = 8.5;
+            brain.castShadow = true;
+            brain.name = 'brain';
+            brain.userData = { organ: 'brain' };
+            organMeshes.brain = brain;
+            scene.add(brain);
+
+            // ريڙھ جي هڏي جي اندر اعصاب
+            const spineNervesGeometry = new THREE.CylinderGeometry(0.1, 0.1, 6, 8);
+            const spineNervesMaterial = new THREE.MeshPhongMaterial({
+                color: 0x9d4edd,
+                transparent: true,
+                opacity: 0.7,
+                emissive: 0x9d4edd,
+                emissiveIntensity: 0.3
+            });
+            const spineNerves = new THREE.Mesh(spineNervesGeometry, spineNervesMaterial);
+            spineNerves.position.y = 3.5;
+            spineNerves.castShadow = true;
+            spineNerves.name = 'spineNerves';
+            scene.add(spineNerves);
+
+            updateLoadingProgress();
+        }
+
+        // پيدائش جو نظام ٺاهيو
+        function createReproductiveSystem() {
+            // مرد اعضا
+            if (currentGender === 'male') {
+                createMaleReproductiveSystem();
+            } else {
+                createFemaleReproductiveSystem();
             }
             
-            // ڪلڪ ايڊيٽر
-            function onMouseClick(event) {
-                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            updateLoadingProgress();
+        }
+
+        // مرد پيدائش جو نظام
+        function createMaleReproductiveSystem() {
+            const maleGeometry = new THREE.SphereGeometry(0.4, 16, 16);
+            const maleMaterial = new THREE.MeshPhongMaterial({
+                color: 0x4dabf7,
+                transparent: true,
+                opacity: 0.9
+            });
+            
+            // ٽيسٽس
+            const testis1 = new THREE.Mesh(maleGeometry, maleMaterial);
+            testis1.position.set(0.4, 0.8, 0.5);
+            testis1.name = 'testis1';
+            scene.add(testis1);
+            
+            const testis2 = new THREE.Mesh(maleGeometry, maleMaterial);
+            testis2.position.set(-0.4, 0.8, 0.5);
+            testis2.name = 'testis2';
+            scene.add(testis2);
+        }
+
+        // عورت پيدائش جو نظام
+        function createFemaleReproductiveSystem() {
+            const ovaryGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+            const ovaryMaterial = new THREE.MeshPhongMaterial({
+                color: 0xff6b6b,
+                transparent: true,
+                opacity: 0.9
+            });
+            
+            // اووري
+            const ovary1 = new THREE.Mesh(ovaryGeometry, ovaryMaterial);
+            ovary1.position.set(0.8, 2.5, 0.3);
+            ovary1.name = 'ovary1';
+            scene.add(ovary1);
+            
+            const ovary2 = new THREE.Mesh(ovaryGeometry, ovaryMaterial);
+            ovary2.position.set(-0.8, 2.5, 0.3);
+            ovary2.name = 'ovary2';
+            scene.add(ovary2);
+            
+            // بچي داني
+            const uterusGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.4);
+            const uterusMaterial = new THREE.MeshPhongMaterial({
+                color: 0xff8e9e,
+                transparent: true,
+                opacity: 0.9
+            });
+            const uterus = new THREE.Mesh(uterusGeometry, uterusMaterial);
+            uterus.position.set(0, 2.2, 0.3);
+            uterus.name = 'uterus';
+            scene.add(uterus);
+        }
+
+        // رت جي رڳن جو جال ٺاهيو
+        function createBloodVessels() {
+            const vesselMaterial = new THREE.MeshPhongMaterial({
+                color: 0xff0000,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            // چند نمونين واريون رڳون
+            for (let i = 0; i < 20; i++) {
+                const startY = 3 + Math.random() * 4;
+                const endY = startY - 1 - Math.random() * 2;
                 
-                raycaster.setFromCamera(mouse, camera);
-                const intersects = raycaster.intersectObjects(scene.children);
+                const curve = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(
+                        Math.random() * 3 - 1.5,
+                        startY,
+                        Math.random() * 2 - 1
+                    ),
+                    new THREE.Vector3(
+                        Math.random() * 3 - 1.5,
+                        (startY + endY) / 2,
+                        Math.random() * 2 - 1
+                    ),
+                    new THREE.Vector3(
+                        Math.random() * 3 - 1.5,
+                        endY,
+                        Math.random() * 2 - 1
+                    )
+                ]);
+
+                const vesselGeometry = new THREE.TubeGeometry(curve, 8, 0.03 + Math.random() * 0.02, 4, false);
+                const vessel = new THREE.Mesh(vesselGeometry, vesselMaterial);
+                vessel.name = `bloodVessel_${i}`;
+                scene.add(vessel);
+            }
+        }
+
+        // ايڪس رے شيڊر سيٽ اپ
+        function setupXRayShader() {
+            // هن فنڪشن ۾ توهان ايڪس رے شيڊر شامل ڪري سگهو ٿا
+            // هن وقت لاءِ اسان صرف ماديال جي آپاسٽي تبديل ڪنداسين
+        }
+
+        // ماوس حرڪت جو انتظام
+        function onMouseMove(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            
+            // سڀني آرگنن کي ري سيٽ ڪريو
+            Object.values(organMeshes).forEach(mesh => {
+                if (mesh.material.emissive) {
+                    mesh.material.emissive.setHex(0x000000);
+                    mesh.material.emissiveIntensity = 0;
+                }
+            });
+
+            // انٽرسڪٽ چڪاس
+            const intersects = raycaster.intersectObjects(Object.values(organMeshes));
+            
+            if (intersects.length > 0) {
+                const intersectedMesh = intersects[0].object;
+                const organId = intersectedMesh.userData.organ;
                 
-                if (intersects.length > 0 && intersects[0].object.userData && intersects[0].object.userData.id) {
-                    const organId = intersects[0].object.userData.id;
+                if (organId && organMeshes[organId]) {
+                    // هائي لايٽ آرگن
+                    organMeshes[organId].material.emissive.setHex(
+                        organDataSindhi[organId].glowColor || 0xffffff
+                    );
+                    organMeshes[organId].material.emissiveIntensity = 0.5;
+                    
+                    // ٽولٽپ ڏيکاريو
+                    renderer.domElement.style.cursor = 'pointer';
+                }
+            } else {
+                renderer.domElement.style.cursor = 'default';
+            }
+        }
+
+        // آرگن تي ڪلڪ
+        function onClick(event) {
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(Object.values(organMeshes));
+            
+            if (intersects.length > 0) {
+                const intersectedMesh = intersects[0].object;
+                const organId = intersectedMesh.userData.organ;
+                
+                if (organId) {
                     selectOrgan(organId);
                 }
             }
-            
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('click', onMouseClick);
-            
-            return organ;
         }
 
         // آرگن چونڊيو
         function selectOrgan(organId) {
-            const organ = organData[organId];
-            if (organ) {
-                // انفو پينل اپڊيٽ ڪريو
-                document.getElementById('selectedOrgan').textContent = organ.name;
-                document.getElementById('organFunction').textContent = organ.function;
-                document.getElementById('organLocation').textContent = organ.location;
-                document.getElementById('organWeight').textContent = organ.weight;
-                document.getElementById('organSpecialty').textContent = organ.specialty;
-                document.getElementById('organDiseases').textContent = organ.diseases;
-                
-                // آرگن کي زوم ڪريو
-                zoomToOrgan(organId);
+            selectedOrgan = organId;
+            const organ = organDataSindhi[organId];
+            
+            if (!organ) return;
+
+            // انفو پينل اپڊيٽ ڪريو
+            document.getElementById('organTitle').textContent = organ.name;
+            document.getElementById('organSystem').textContent = organ.system;
+            document.getElementById('organFunction').textContent = organ.function;
+            document.getElementById('organLocation').textContent = organ.location;
+            document.getElementById('organWeight').textContent = organ.weight;
+            document.getElementById('organSpecialty').textContent = organ.specialty;
+            
+            // انفو پينل ڏيکاريو
+            document.getElementById('infoPanel').classList.add('active');
+            
+            // آرگن کي زوم ڪريو
+            zoomToOrgan(organId);
+            
+            // آرگن کي خاص گلوه ڏيکاريو
+            Object.values(organMeshes).forEach(mesh => {
+                if (mesh.material.emissive) {
+                    mesh.material.emissive.setHex(0x000000);
+                    mesh.material.emissiveIntensity = 0;
+                }
+            });
+            
+            if (organMeshes[organId]) {
+                organMeshes[organId].material.emissive.setHex(organ.glowColor || 0xffffff);
+                organMeshes[organId].material.emissiveIntensity = 1.0;
             }
         }
 
         // آرگن تي زوم ڪريو
         function zoomToOrgan(organId) {
-            // هن فنڪشن ۾ توهان آرگن تي زوم ڪري سگھو ٿا
-            console.log('Zooming to organ:', organId);
-        }
-
-        // آرگن ڊيٽيلس ڏيکاريو
-        function showOrganDetails(organId) {
-            const organ = organData[organId];
-            if (!organ) return;
+            let targetPosition = new THREE.Vector3(0, 5, 0);
             
-            // موڊل هيڊنگ اپڊيٽ ڪريو
-            document.getElementById('modalOrganTitle').textContent = organ.name;
-            
-            // بنيادي معلومات
-            document.getElementById('modalBasicInfo').innerHTML = `
-                <p><strong>سسٽم:</strong> ${organ.system}</p>
-                <p><strong>وزن:</strong> ${organ.weight}</p>
-                <p><strong>جڳهه:</strong> ${organ.location}</p>
-                <p><strong>رنگ:</strong> <span style="color:${organ.color}">█</span> ${organ.color}</p>
-            `;
-            
-            // ڪم جو طريقو
-            document.getElementById('modalFunction').innerHTML = `
-                <p>${organ.function}</p>
-                <p><strong>خاصيت:</strong> ${organ.specialty}</p>
-            `;
-            
-            // بيماريون
-            document.getElementById('modalDiseases').innerHTML = `
-                <p>${organ.diseases}</p>
-                <p><strong>احتياط:</strong> صحيح خوراک، ورزش، باقاعده چڪاس</p>
-            `;
-            
-            // اهميت
-            document.getElementById('modalImportance').innerHTML = `
-                <p>انساني جسم جو انتھائي اهم آرگن آهي. هن جي صحيح ڪم ڪرڻ سان جسم صحيح رهي ٿو. هن آرگن جي حفاظت لاءِ صحيح خوراک، باقاعده ورزش ۽ طبي چڪاس ضروري آهي.</p>
-            `;
-            
-            // چارٽ ٺاهيو
-            createOrganChart(organId);
-            
-            // موڊل ڏيکاريو
-            document.getElementById('organModal').style.display = 'block';
-        }
-
-        // آرگن چارٽ ٺاهيو
-        function createOrganChart(organId) {
-            const ctx = document.getElementById('organChart').getContext('2d');
-            
-            // جيڪڏهن پوئين چارٽ موجود آهي ته ختم ڪريو
-            if (window.organChart instanceof Chart) {
-                window.organChart.destroy();
+            switch (organId) {
+                case 'brain':
+                    targetPosition.set(0, 10, 5);
+                    break;
+                case 'heart':
+                    targetPosition.set(1, 6, 2);
+                    break;
+                case 'liver':
+                    targetPosition.set(2, 4, -1);
+                    break;
+                case 'lungs':
+                    targetPosition.set(0, 6, 2);
+                    break;
+                case 'stomach':
+                    targetPosition.set(-0.5, 4.5, -0.5);
+                    break;
+                case 'spine':
+                    targetPosition.set(0, 4, 3);
+                    break;
             }
             
-            // آرگن جي ڊيٽا
-            const chartData = {
-                'brain': {
-                    labels: ['سوچ جو ڪم', 'ياداشت', 'جذبات', 'حركت جو ڪنٽرول', 'سنس جي وصولي'],
-                    data: [30, 25, 20, 15, 10],
-                    color: organData.brain.color
-                },
-                'heart': {
-                    labels: ['پمپنگ ڪم', 'بلڊ پريشر', 'آڪسيجن ورهه', 'غذائيت ورهه'],
-                    data: [40, 30, 20, 10],
-                    color: organData.heart.color
-                },
-                'liver': {
-                    labels: ['هضم ڪم', 'زهر ختم ڪرڻ', 'پروٽين ٺاھڻ', 'بلڊ شوگر ڪنٽرول'],
-                    data: [35, 30, 20, 15],
-                    color: organData.liver.color
-                }
-            };
-            
-            const data = chartData[organId] || chartData.brain;
-            
-            window.organChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        data: data.data,
-                        backgroundColor: [
-                            data.color,
-                            lightenColor(data.color, 20),
-                            lightenColor(data.color, 40),
-                            lightenColor(data.color, 60),
-                            lightenColor(data.color, 80)
-                        ],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            rtl: true
-                        },
-                        title: {
-                            display: true,
-                            text: 'آرگن جا ڪم (فيصد ۾)',
-                            font: {
-                                size: 16
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // رنگ هلڪو ڪريو
-        function lightenColor(color, percent) {
-            const num = parseInt(color.replace('#', ''), 16);
-            const amt = Math.round(2.55 * percent);
-            const R = (num >> 16) + amt;
-            const G = (num >> 8 & 0x00FF) + amt;
-            const B = (num & 0x0000FF) + amt;
-            return `#${(0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
-                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1)}`;
+            // نرم ڪئميرا حرڪت
+            new TWEEN.Tween(camera.position)
+                .to(targetPosition, 1000)
+                .easing(TWEEN.Easing.Quadratic.InOut)
+                .start();
         }
 
         // سسٽم ڏيکاريو
         function showSystem(systemId) {
-            const system = systemData[systemId];
-            if (!system) return;
-            
-            // آرگن انفو پينل اپڊيٽ ڪريو
-            document.getElementById('selectedOrgan').textContent = system.name;
-            document.getElementById('organFunction').textContent = system.function;
-            document.getElementById('organLocation').textContent = 'مڪمل جسم ۾';
-            document.getElementById('organWeight').textContent = 'سسٽم جي آرگنن جي مطابق';
-            document.getElementById('organSpecialty').textContent = `آرگن: ${system.organ.join(', ')}`;
-            document.getElementById('organDiseases').textContent = 'سسٽمي بيماريون، غير متوازن خوراک، غيرصحيح روين';
-            
-            // سسٽم جي آرگنن کي هائيلائيٽ ڪريو
-            highlightSystemOrgans(systemId);
+            // هن فنڪشن ۾ توهان خاص سسٽم جا آرگن هائي لايٽ ڪري سگهو ٿا
+            console.log('Showing system:', systemId);
         }
 
-        // سسٽم جا آرگن هائيلائيٽ ڪريو
-        function highlightSystemOrgans(systemId) {
-            // هن فنڪشن ۾ توهان سسٽم جا آرگن هائيلائيٽ ڪري سگهو ٿا
-            console.log('Highlighting system:', systemId);
-        }
-
-        // آرگن ڳوليو
-        function searchOrgans() {
-            const searchTerm = document.getElementById('organ-search').value.toLowerCase();
-            const resultsDiv = document.getElementById('searchResults');
+        // سسٽم ٽاگل ڪريو
+        function toggleSystem(systemId) {
+            systemsVisibility[systemId] = !systemsVisibility[systemId];
             
-            if (searchTerm.length < 2) {
-                resultsDiv.style.display = 'none';
-                return;
-            }
+            const toggle = document.querySelector(`[data-system="${systemId}"] .system-toggle`);
+            toggle.classList.toggle('active');
             
-            const results = [];
-            for (const [id, organ] of Object.entries(organData)) {
-                if (organ.name.includes(searchTerm) || organ.function.includes(searchTerm)) {
-                    results.push({ id, name: organ.name });
+            // آرگن ڏيکاريو/لڪايو
+            const systemOrgans = getOrgansBySystem(systemId);
+            systemOrgans.forEach(organId => {
+                if (organMeshes[organId]) {
+                    organMeshes[organId].visible = systemsVisibility[systemId];
                 }
-            }
+            });
+        }
+
+        // سسٽم جا آرگن ورجايو
+        function getOrgansBySystem(systemId) {
+            const systemOrgans = {
+                'skeletal': ['spine', 'bones'],
+                'circulatory': ['heart'],
+                'respiratory': ['lungs'],
+                'digestive': ['liver', 'stomach', 'intestines'],
+                'nervous': ['brain'],
+                'reproductive': []
+            };
             
-            if (results.length > 0) {
-                resultsDiv.innerHTML = results.map(result => 
-                    `<div class="search-item" onclick="selectOrgan('${result.id}'); document.getElementById('searchResults').style.display='none';">${result.name}</div>`
-                ).join('');
-                resultsDiv.style.display = 'block';
+            return systemOrgans[systemId] || [];
+        }
+
+        // جينڊر تبديل ڪريو
+        function switchGender(gender) {
+            currentGender = gender;
+            
+            // بٽن کي اپڊيٽ ڪريو
+            document.getElementById('maleBtn').classList.toggle('active', gender === 'male');
+            document.getElementById('femaleBtn').classList.toggle('active', gender === 'female');
+            
+            // پيدائشي نظام ٻيهر ٺاهيو
+            removeReproductiveSystem();
+            createReproductiveSystem();
+            
+            // آرگن جو عنوان تبديل ڪريو
+            if (gender === 'female') {
+                document.querySelector('[data-system="reproductive"] h4').textContent = 'عورت پيدائش جو نظام';
             } else {
-                resultsDiv.innerHTML = '<div class="search-item">ڪوبه نتيجو نہ مليو</div>';
-                resultsDiv.style.display = 'block';
+                document.querySelector('[data-system="reproductive"] h4').textContent = 'مرد پيدائش جو نظام';
             }
         }
 
-        // ويوور ڪنٽرول فنڪشن
-        function resetView() {
-            controls.reset();
-            camera.position.z = 5;
+        // پيدائشي نظام هٽايو
+        function removeReproductiveSystem() {
+            const reproductiveObjects = ['testis1', 'testis2', 'ovary1', 'ovary2', 'uterus'];
+            reproductiveObjects.forEach(name => {
+                const object = scene.getObjectByName(name);
+                if (object) {
+                    scene.remove(object);
+                }
+            });
+        }
+
+        // ڪنٽرول فنڪشنز
+        function rotateLeft() {
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 1;
+        }
+
+        function rotateRight() {
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = -1;
         }
 
         function zoomIn() {
-            camera.position.z *= 0.8;
+            camera.position.multiplyScalar(0.9);
         }
 
         function zoomOut() {
-            camera.position.z *= 1.2;
+            camera.position.multiplyScalar(1.1);
         }
 
-        function toggleWireframe() {
-            scene.children.forEach(child => {
-                if (child.isMesh) {
-                    child.material.wireframe = !child.material.wireframe;
+        function toggleGender() {
+            const newGender = currentGender === 'male' ? 'female' : 'male';
+            switchGender(newGender);
+        }
+
+        function toggleXRay() {
+            xRayMode = !xRayMode;
+            
+            // سڀني آرگنن جي آپاسٽي تبديل ڪريو
+            Object.values(organMeshes).forEach(mesh => {
+                if (xRayMode) {
+                    mesh.material.transparent = true;
+                    mesh.material.opacity = 0.6;
+                    mesh.material.depthWrite = false;
+                } else {
+                    mesh.material.transparent = true;
+                    mesh.material.opacity = 0.9;
+                    mesh.material.depthWrite = true;
                 }
+                mesh.material.needsUpdate = true;
             });
-        }
-
-        // موڊل بند ڪريو
-        function closeModal() {
-            document.getElementById('organModal').style.display = 'none';
-        }
-
-        // سيڪشن تي اسڪرول ڪريو
-        function scrollToSection(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
+            
+            // ايميسيو گلوه بند ڪريو
+            if (xRayMode) {
+                scene.traverse(obj => {
+                    if (obj.material && obj.material.emissive) {
+                        obj.material.emissiveIntensity = 0;
+                    }
+                });
             }
         }
 
-        // موبائيل نيوگيشن ٽاگل ڪريو
-        function toggleMobileNav() {
-            const mobileNav = document.getElementById('mobileNav');
-            mobileNav.classList.toggle('active');
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+            
+            const button = document.getElementById('toggleSidebar');
+            if (sidebar.classList.contains('active')) {
+                button.innerHTML = '<i class="fas fa-times"></i>';
+            } else {
+                button.innerHTML = '<i class="fas fa-sliders-h"></i>';
+            }
         }
 
-        // پيج لوڊ ٿيڻ تي انيشلائيز ڪريو
-        window.onload = function() {
-            initViewer();
-            selectOrgan('brain'); // پهريون آرگن طور دماغ ڏيکاريو
+        function resetView() {
+            controls.reset();
+            camera.position.set(0, 10, 20);
+            camera.lookAt(0, 0, 0);
+            controls.autoRotate = false;
             
-            // آرگن سرچ لاءِ ايڊيٽر
-            document.addEventListener('click', function(event) {
-                if (!event.target.closest('.search-container')) {
-                    document.getElementById('searchResults').style.display = 'none';
+            // آرگن گلوه ري سيٽ
+            Object.values(organMeshes).forEach(mesh => {
+                if (mesh.material.emissive) {
+                    mesh.material.emissive.setHex(0x000000);
+                    mesh.material.emissiveIntensity = 0;
                 }
             });
-        };
+            
+            // انفو پينل لڪايو
+            document.getElementById('infoPanel').classList.remove('active');
+        }
+
+        // ري سائز ايڊيٽر
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // لوڊنگ پروگرس اپڊيٽ
+        function updateLoadingProgress() {
+            loadingProgress += (1 / totalOrgans) * 100;
+            document.getElementById('loadingProgress').style.width = `${Math.min(loadingProgress, 100)}%`;
+        }
+
+        // اينيميشن لوپ
+        function animate() {
+            requestAnimationFrame(animate);
+            TWEEN.update();
+            controls.update();
+            
+            // آرگنن جي نرم حرڪت
+            if (organMeshes.heart) {
+                organMeshes.heart.scale.x = 1 + Math.sin(Date.now() * 0.005) * 0.05;
+                organMeshes.heart.scale.y = 1 + Math.sin(Date.now() * 0.005) * 0.05;
+            }
+            
+            if (organMeshes.lungs) {
+                const scale = 1 + Math.sin(Date.now() * 0.003) * 0.03;
+                organMeshes.leftLung.scale.y = scale;
+                organMeshes.rightLung.scale.y = scale;
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // پيج لوڊ ٿيڻ تي انيشلائيز
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
